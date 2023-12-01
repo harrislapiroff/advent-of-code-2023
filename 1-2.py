@@ -21,11 +21,14 @@ def line_to_number(line: str) -> int:
     # DIGITS regex and then convert it to an int
     first_number = re.search(DIGIT_RE, line)
     first_int = (int_ for int_, str_ in DIGITS if str_ == first_number[0]).__next__()
+
     # To find the last number let's reverse both the string and the regex since regexes
     # don't support right-to-left matching and we can't guarantee the last match won't
-    # overlap with a different match (and therefore be excluded)
+    # overlap with a different match--i.e., for "nine1eightwo" a LTR regex would erroneously
+    # match "eight" as the final match instead of "two"
     last_number = re.search(DIGIT_RE[::-1], line[::-1])
     last_int = (int_ for int_, str_ in DIGITS if str_ == last_number[0][::-1]).__next__()
+
     # Return an int of the two digits concatenated
     return int(str(first_int) + str(last_int))
 
